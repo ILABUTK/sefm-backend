@@ -37,7 +37,7 @@ class RegisterController extends Controller
     public function __construct()
     {
         // $this->middleware('guest');
-        $this->middleware('auth'); //basically disable it
+        $this->middleware('auth'); //basically disable it. added by xp.
     }
 
     /**
