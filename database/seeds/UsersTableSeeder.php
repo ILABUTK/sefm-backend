@@ -21,6 +21,9 @@ class UsersTableSeeder extends Seeder
           'name' => 'Cansu Akarsu',
           'email' => 'Cansu.Akarsu@laerdal.com',
           'password' => bcrypt('sefm4Akarsu!'),
-      	]);
+        ]);
+        
+        ### added outside using postman
+        ### utksimulation@gmail.com, sefm@UTK2019!
     }
 }
