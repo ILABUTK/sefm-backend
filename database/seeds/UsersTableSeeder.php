@@ -21,6 +21,9 @@ class UsersTableSeeder extends Seeder
           'name' => 'Cansu Akarsu',
           'email' => 'Cansu.Akarsu@laerdal.com',
           'password' => bcrypt('sefm4Akarsu!'),
-      	]);
+        ]);
+        
+        /// harold.andersen@wsu.edu; sefm20194WSU!
+        /// student@wsu.edu; stu20194SEFM!
     }
 }
