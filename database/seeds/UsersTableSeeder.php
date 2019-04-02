@@ -25,5 +25,9 @@ class UsersTableSeeder extends Seeder
         
         /// harold.andersen@wsu.edu; sefm20194WSU!
         /// student@wsu.edu; stu20194SEFM!
+
+        /// ### added outside using postman
+        ///### utksimulation@gmail.com, sefm@UTK2019!
+    
     }
 }
