@@ -8,17 +8,54 @@
     use Illuminate\Support\Facades\Validator;
     use JWTAuth;
     use Tymon\JWTAuth\Exceptions\JWTException;
+    use Illuminate\Support\Facades\Log;
+
+    use Illuminate\Support\Carbon;
+    use Illuminate\Auth\Events\Login;
+    use Yadahan\AuthenticationLog\AuthenticationLog;
+    use Yadahan\AuthenticationLog\Notifications\NewDevice;
 
     class UserController extends Controller
     {
+
+         /**
+         * Handle the event.
+         *
+         * @param  
+         * @return void
+         */
+        public function log_jwt_login(Request $request)
+        {
+            $user = JWTAuth::user();
+            $ip = $request->ip();
+            $userAgent = $request->userAgent();
+            $known = $user->authentications()->whereIpAddress($ip)->whereUserAgent($userAgent)->first();
+
+            $authenticationLog = new AuthenticationLog([
+                'ip_address' => $ip,
+                'user_agent' => $userAgent,
+                'login_at' => Carbon::now(),
+            ]);
+
+            $user->authentications()->save($authenticationLog);
+
+            if (! $known && config('authentication-log.notify')) {
+                $user->notify(new NewDevice($authenticationLog));
+            }
+        }
         public function authenticate(Request $request)
         {
             $credentials = $request->only('email', 'password');
 
             try {
+                \Log::debug('Tried to login here via UserController:: authenticate ...' .time());
+
                 if (! $token = JWTAuth::attempt($credentials)) {
                     return response()->json(['error' => 'invalid_credentials'], 400);
                 }
+                // success
+                $this->log_jwt_login($request);
+
             } catch (JWTException $e) {
                 return response()->json(['error' => 'could_not_create_token'], 500);
             }
@@ -49,10 +86,37 @@
             return response()->json(compact('user','token'),201);
         }
 
+        /**
+         * Handle the event.
+         *
+         * @param  
+         * @return void
+         */
+        public function log_jwt_logout(Request $request)
+        {
+            if (JWTAuth::user()) {
+                $user = JWTAuth::user();
+                $ip = $request->ip();
+                $userAgent = $request->userAgent();
+                $authenticationLog = $user->authentications()->whereIpAddress($ip)->whereUserAgent($userAgent)->first();
 
+                if (! $authenticationLog) {
+                    $authenticationLog = new AuthenticationLog([
+                        'ip_address' => $ip,
+                        'user_agent' => $userAgent,
+                    ]);
+                }
+
+                $authenticationLog->logout_at = Carbon::now();
+
+                $user->authentications()->save($authenticationLog);
+            }
+        }
         public function logout(Request $request)
         {
             try {
+                $this->log_jwt_logout($request); //log
+
                 JWTAuth::invalidate(JWTAuth::parseToken());                
             } catch (JWTException $e) {
                 return response()->json(['error' => 'logout encountered error'], 400);

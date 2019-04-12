@@ -3,12 +3,13 @@
     namespace App;
 
     use Illuminate\Notifications\Notifiable;
+    use Yadahan\AuthenticationLog\AuthenticationLogable;
     use Illuminate\Foundation\Auth\User as Authenticatable;
     use Tymon\JWTAuth\Contracts\JWTSubject;
 
     class User extends Authenticatable implements JWTSubject
     {
-        use Notifiable;
+        use Notifiable, AuthenticationLogable;
 
         /**
          * The attributes that are mass assignable.
@@ -35,5 +36,15 @@
         public function getJWTCustomClaims()
         {
             return [];
+        }
+
+        /**
+         * The Authentication Log notifications delivery channels.
+         *
+         * @return array
+         */
+        public function notifyAuthenticationLogVia()
+        {
+            return ['mail', 'slack']; // nexmo
         }
     }

@@ -18,13 +18,14 @@ Route::get('/', function () {
     // return redirect('/sefm');
 });
 
+// broadcast room
 Route::post('/broadcast/{classroom}', function ($classroom, Request $request){
     $data = $request->input('data');
     event(new TeacheBroadcastNewData($classroom, $data));
     return response('OK');
 });
 
-
+// change speed
 Route::post('/broadcast/{classroom}/speed', function ($classroom, Request $request){
     $speed = $request->input('speed');
     event(new SpeedChange($classroom, $speed));
