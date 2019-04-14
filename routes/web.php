@@ -32,8 +32,8 @@ Route::post('/broadcast/{classroom}/speed', function ($classroom, Request $reque
     return response('OK');
 });
 
-Auth::routes();
-Route::get('/web', 'HomeController@index')->name('home');
+Auth::routes(); // needed
+Route::get('/home', 'HomeController@index')->name('home');
 
 Route::namespace('Auth')->group(function () {
     Route::post('/password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.email');

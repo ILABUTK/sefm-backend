@@ -19,6 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('register', 'UserController@register');  // register
 Route::post('login', 'UserController@authenticate'); // login
+
 Route::get('open', 'DataController@open'); // sample method: open data
 
 Route::group(['middleware' => ['jwt.verify']], function() {
