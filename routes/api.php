@@ -19,6 +19,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('register', 'UserController@register');  // register
 Route::post('login', 'UserController@authenticate'); // login
+Route::post('password/reset', 'UserController@sendResetEmail');
+Route::post('refresh', 'UserController@refresh'); // refresh token
 
 Route::get('open', 'DataController@open'); // sample method: open data
 
