@@ -15,14 +15,17 @@ use Illuminate\Http\Request;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
-});
+}); // get user info from token
 
-Route::post('register', 'UserController@register');
-Route::post('login', 'UserController@authenticate');
-Route::get('open', 'DataController@open');
+Route::post('register', 'UserController@register');  // register
+Route::post('login', 'UserController@authenticate'); // login
+Route::post('password/reset', 'UserController@sendResetEmail');
+Route::post('refresh', 'UserController@refresh'); // refresh token
+
+Route::get('open', 'DataController@open'); // sample method: open data
 
 Route::group(['middleware' => ['jwt.verify']], function() {
-    Route::get('user', 'UserController@getAuthenticatedUser');
-    Route::get('closed', 'DataController@closed');
-    Route::post('logout', 'UserController@logout');
+    Route::get('user', 'UserController@getAuthenticatedUser'); // /api/user get user via token
+    Route::get('closed', 'DataController@closed'); // sample method: secured data
+    Route::post('logout', 'UserController@logout'); // invalidate token
 });

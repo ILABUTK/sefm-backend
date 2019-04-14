@@ -18,21 +18,22 @@ Route::get('/', function () {
     // return redirect('/sefm');
 });
 
+// broadcast room
 Route::post('/broadcast/{classroom}', function ($classroom, Request $request){
     $data = $request->input('data');
     event(new TeacheBroadcastNewData($classroom, $data));
     return response('OK');
 });
 
-
+// change speed
 Route::post('/broadcast/{classroom}/speed', function ($classroom, Request $request){
     $speed = $request->input('speed');
     event(new SpeedChange($classroom, $speed));
     return response('OK');
 });
 
-Auth::routes();
-Route::get('/web', 'HomeController@index')->name('home');
+Auth::routes(); // needed
+Route::get('/home', 'HomeController@index')->name('home');
 
 Route::namespace('Auth')->group(function () {
     Route::post('/password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.email');

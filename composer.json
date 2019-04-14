@@ -6,10 +6,10 @@
     "type": "project",
     "require": {
         "php": ">=5.6.4",
-        "barryvdh/laravel-cors": "^0.9.2",
-        "laravel/framework": "5.4.*",
+        "barryvdh/laravel-cors": "^0.11.3",
+        "laravel/framework": "5.7.*",
         "laravel/tinker": "~1.0",
-        "pusher/pusher-php-server": "~2.6",
+        "pusher/pusher-php-server": "~3.0",
         "tymon/jwt-auth": "dev-develop"
     },
     "require-dev": {
